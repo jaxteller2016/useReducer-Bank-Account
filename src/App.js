@@ -1,5 +1,5 @@
-import { useReducer } from 'react';
-import './styles.css';
+import { useReducer } from "react";
+import "./styles.css";
 
 /*
 INSTRUCTIONS / CONSIDERATIONS:
@@ -17,42 +17,44 @@ INSTRUCTIONS / CONSIDERATIONS:
 6. When the customer pays the loan, the opposite happens: the money is taken from the balance, and the 'loan' will get back to 0. This can lead to negative balances, but that's no problem, because the customer can't close their account now (see next point)
 
 7. Customer can only close an account if there is no loan, AND if the balance is zero. If this condition is not met, just return the state. If the condition is met, the account is deactivated and all money is withdrawn. The account basically gets back to the initial state
+
+Happy Coding!
 */
 
 const initialState = {
   balance: 0,
   loan: 0,
-  isActive: false
+  isActive: false,
 };
 
 function reducer(state, action) {
-  if (!state.isActive && action.type !== 'open') return state;
+  if (!state.isActive && action.type !== "open") return state;
 
   switch (action.type) {
-    case 'open':
+    case "open":
       return { ...state, isActive: true, balance: state.balance + 500 };
-    case 'deposit':
+    case "deposit":
       return { ...state, balance: state.balance + action.payload };
-    case 'withdrawal':
+    case "withdrawal":
       return { ...state, balance: state.balance - action.payload };
-    case 'requestLoan':
+    case "requestLoan":
       if (state.loan > 0) return state;
       return {
         ...state,
         balance: state.balance + action.payload,
-        loan: action.payload
+        loan: action.payload,
       };
-    case 'payLoan':
+    case "payLoan":
       return {
         ...state,
         balance: state.balance - state.loan,
-        loan: 0
+        loan: 0,
       };
-    case 'close':
+    case "close":
       if (state.loan > 0 || state.balance !== 0) return state;
       return { ...initialState };
     default:
-      throw new Error('Action unknown');
+      throw new Error("Action unknown");
   }
 }
 
@@ -63,15 +65,15 @@ export default function App() {
   );
 
   return (
-    <div className='App'>
+    <div className="App">
       <h1>useReducer Bank Account</h1>
-      <p>Balance: {isActive ? balance : 'X'}</p>
+      <p>Balance: {isActive ? balance : "X"}</p>
       <p>Loan: {loan}</p>
 
       <p>
         <button
           onClick={() => {
-            dispatch({ type: 'open' });
+            dispatch({ type: "open" });
           }}
           disabled={isActive}
         >
@@ -81,7 +83,7 @@ export default function App() {
       <p>
         <button
           onClick={() => {
-            dispatch({ type: 'deposit', payload: 150 });
+            dispatch({ type: "deposit", payload: 150 });
           }}
           disabled={!isActive}
         >
@@ -91,7 +93,7 @@ export default function App() {
       <p>
         <button
           onClick={() => {
-            dispatch({ type: 'withdrawal', payload: 50 });
+            dispatch({ type: "withdrawal", payload: 50 });
           }}
           disabled={!isActive}
         >
@@ -101,7 +103,7 @@ export default function App() {
       <p>
         <button
           onClick={() => {
-            dispatch({ type: 'requestLoan', payload: 5000 });
+            dispatch({ type: "requestLoan", payload: 5000 });
           }}
           disabled={loan === 0 ? !isActive : isActive}
         >
@@ -111,7 +113,7 @@ export default function App() {
       <p>
         <button
           onClick={() => {
-            dispatch({ type: 'payLoan' });
+            dispatch({ type: "payLoan" });
           }}
           disabled={!isActive}
         >
@@ -121,7 +123,7 @@ export default function App() {
       <p>
         <button
           onClick={() => {
-            dispatch({ type: 'close' });
+            dispatch({ type: "close" });
           }}
           disabled={loan === 0 && balance === 0 ? !isActive : isActive}
         >
